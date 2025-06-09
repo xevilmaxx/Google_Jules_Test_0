@@ -97,4 +97,22 @@
   <data name="PacManMenuOption" xml:space="preserve">
     <value>(4) Play Pac-Man</value>
   </data>
+  <data name="DatabaseMenuOption" xml:space="preserve">
+    <value>(5) Database Operations</value>
+  </data>
+  <data name="ViewLogEntriesPrompt" xml:space="preserve">
+    <value>Current Log Entries:</value>
+  </data>
+  <data name="AddRandomEntryPrompt" xml:space="preserve">
+    <value>Add a new random log entry? (y/n):</value>
+  </data>
+  <data name="EntryAddedMessage" xml:space="preserve">
+    <value>New random entry added.</value>
+  </data>
+  <data name="NoEntriesFoundMessage" xml:space="preserve">
+    <value>No log entries found.</value>
+  </data>
+  <data name="YesChar" xml:space="preserve">
+    <value>y</value>
+  </data>
 </root>
