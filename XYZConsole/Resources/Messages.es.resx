@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeMessage" xml:space="preserve">
+    <value>¡Bienvenido a la Calculadora Avanzada!</value>
+  </data>
+  <data name="SelectLanguagePrompt" xml:space="preserve">
+    <value>Seleccione el idioma: (1) Inglés, (2) Español</value>
+  </data>
+  <data name="MenuPrompt" xml:space="preserve">
+    <value>Elija una opción: (1) Realizar Cálculo, (2) Cambiar Idioma, (3) Salir</value>
+  </data>
+  <data name="EnterFirstNumberPrompt" xml:space="preserve">
+    <value>Ingrese el primer número:</value>
+  </data>
+  <data name="EnterSecondNumberPrompt" xml:space="preserve">
+    <value>Ingrese el segundo número:</value>
+  </data>
+  <data name="EnterOperationPrompt" xml:space="preserve">
+    <value>Ingrese la operación (+, -, *, /):</value>
+  </data>
+  <data name="ResultPrefix" xml:space="preserve">
+    <value>Resultado:</value>
+  </data>
+  <data name="InvalidInputError" xml:space="preserve">
+    <value>Entrada inválida. Por favor, inténtelo de nuevo.</value>
+  </data>
+  <data name="DivisionByZeroError" xml:space="preserve">
+    <value>Error: No se puede dividir por cero.</value>
+  </data>
+  <data name="GoodbyeMessage" xml:space="preserve">
+  <data name="CriticalErrorLoggerNotInitialized" xml:space="preserve">
+  <data name="CriticalErrorCalculatorNotInitialized" xml:space="preserve">
+    <value>Error: El servicio de calculadora no está disponible. Reinicie la aplicación o contacte a soporte.</value>
+  </data>
+    <value>Error Crítico: No se pudo inicializar el registrador. La funcionalidad de cálculo está deshabilitada.</value>
+  </data>
+    <value>¡Adiós!</value>
+  </data>
+</root>

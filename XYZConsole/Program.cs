@@ -1,75 +1,168 @@
 using NLog;
 using System;
-using LibXYZ; // Reference to the class library
+using System.Globalization; // Required for CultureInfo
+using System.Threading;    // Required for Thread.CurrentThread
+using LibXYZ;
 
 namespace XYZConsole
 {
     class Program
     {
         private static ILogger? logger; // Nullable logger
+        private static AdvancedCalculator? calculator;
 
         static void Main(string[] args)
         {
+            // Initialize NLog first
             try
             {
-                // Configure NLog. This will automatically load nlog.config
                 LogManager.Setup().LoadConfigurationFromFile("nlog.config");
                 logger = LogManager.GetCurrentClassLogger();
-
-                logger.Info("XYZConsole application started.");
-
-                // Ensure logger is not null before using it
-                if (logger == null)
-                {
-                    Console.WriteLine("Error: Logger could not be initialized.");
-                    return;
-                }
-
-                AdvancedCalculator calculator = new AdvancedCalculator(logger);
-
-                logger.Debug("Performing calculations...");
-
-                double sum = calculator.Add(10, 5);
-                Console.WriteLine($"10 + 5 = {sum}");
-
-                double difference = calculator.Subtract(10, 5);
-                Console.WriteLine($"10 - 5 = {difference}");
-
-                double product = calculator.Multiply(10, 5);
-                Console.WriteLine($"10 * 5 = {product}");
-
-                double quotient = calculator.Divide(10, 5);
-                Console.WriteLine($"10 / 5 = {quotient}");
-
-                logger.Debug("Attempting division by zero.");
-                try
-                {
-                    calculator.Divide(10, 0);
-                }
-                catch (DivideByZeroException ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                    // The error is already logged by the calculator class
-                }
-
-                logger.Info("XYZConsole application finished successfully.");
             }
             catch (Exception ex)
             {
-                // Log any unexpected exception
-                if (logger != null)
+                Console.WriteLine($"Critical NLog initialization error: {ex.Message}. Logging will be unavailable.");
+                // Optionally, exit if logging is absolutely critical
+            }
+
+            logger?.Info("XYZConsole application started.");
+
+            // Initialize LocalizationManager - default to English
+            LocalizationManager.SetLanguage("en");
+
+            // Initialize Calculator
+            if (logger != null)
+            {
+                calculator = new AdvancedCalculator(logger);
+            }
+            else
+            {
+                // If logger failed, we can't create calculator.
+                // Program will still run but calculations will be disabled in the menu.
+                Console.WriteLine(LocalizationManager.GetString("CriticalErrorLoggerNotInitialized"));
+            }
+
+            Console.WriteLine(LocalizationManager.GetString("WelcomeMessage"));
+
+            bool running = true;
+            while (running)
+            {
+                Console.WriteLine("\n" + LocalizationManager.GetString("MenuPrompt"));
+                string? choice = Console.ReadLine();
+
+                switch (choice)
                 {
-                    logger.Fatal(ex, "An unhandled exception occurred in XYZConsole.");
-                }
-                else
-                {
-                    Console.WriteLine($"Critical Error: {ex.Message}. Logger was not available.");
+                    case "1": // Perform Calculation
+                        if (calculator != null)
+                        {
+                            PerformCalculation();
+                        }
+                        else
+                        {
+                             Console.WriteLine(LocalizationManager.GetString("CriticalErrorCalculatorNotInitialized")); // Create this key
+                        }
+                        break;
+                    case "2": // Change Language
+                        ChangeLanguage();
+                        break;
+                    case "3": // Exit
+                        running = false;
+                        break;
+                    default:
+                        Console.WriteLine(LocalizationManager.GetString("InvalidInputError"));
+                        break;
                 }
             }
-            finally
+
+            Console.WriteLine(LocalizationManager.GetString("GoodbyeMessage"));
+            logger?.Info("XYZConsole application finished successfully.");
+            LogManager.Shutdown(); // Flush and shutdown NLog
+        }
+
+        static void ChangeLanguage()
+        {
+            Console.WriteLine(LocalizationManager.GetString("SelectLanguagePrompt"));
+            string? langChoice = Console.ReadLine();
+            switch (langChoice)
             {
-                // Ensure to flush and shutdown NLog, otherwise logs might be lost
-                LogManager.Shutdown();
+                case "1":
+                    LocalizationManager.SetLanguage("en");
+                    logger?.Info("Language changed to English.");
+                    break;
+                case "2":
+                    LocalizationManager.SetLanguage("es");
+                    logger?.Info("Language changed to Spanish.");
+                    break;
+                default:
+                    Console.WriteLine(LocalizationManager.GetString("InvalidInputError"));
+                    break;
+            }
+            // Re-display welcome message in new language
+            Console.WriteLine(LocalizationManager.GetString("WelcomeMessage"));
+        }
+
+        static void PerformCalculation()
+        {
+            if (calculator == null) // Should be checked before calling
+            {
+                Console.WriteLine(LocalizationManager.GetString("CriticalErrorCalculatorNotInitialized")); // Create this key
+                return;
+            }
+
+            double num1, num2;
+            string? operation;
+
+            try
+            {
+                Console.WriteLine(LocalizationManager.GetString("EnterFirstNumberPrompt"));
+                string? input1 = Console.ReadLine();
+                if (!double.TryParse(input1, NumberStyles.Any, CultureInfo.CurrentCulture, out num1))
+                {
+                    Console.WriteLine(LocalizationManager.GetString("InvalidInputError"));
+                    return;
+                }
+
+                Console.WriteLine(LocalizationManager.GetString("EnterOperationPrompt"));
+                operation = Console.ReadLine();
+
+                Console.WriteLine(LocalizationManager.GetString("EnterSecondNumberPrompt"));
+                string? input2 = Console.ReadLine();
+                if (!double.TryParse(input2, NumberStyles.Any, CultureInfo.CurrentCulture, out num2))
+                {
+                    Console.WriteLine(LocalizationManager.GetString("InvalidInputError"));
+                    return;
+                }
+
+                double result;
+                switch (operation)
+                {
+                    case "+":
+                        result = calculator.Add(num1, num2);
+                        break;
+                    case "-":
+                        result = calculator.Subtract(num1, num2);
+                        break;
+                    case "*":
+                        result = calculator.Multiply(num1, num2);
+                        break;
+                    case "/":
+                        result = calculator.Divide(num1, num2); // Handles DivideByZeroException internally
+                        break;
+                    default:
+                        Console.WriteLine(LocalizationManager.GetString("InvalidInputError"));
+                        return;
+                }
+                Console.WriteLine($"{LocalizationManager.GetString("ResultPrefix")} {result}");
+            }
+            catch (DivideByZeroException)
+            {
+                // AdvancedCalculator already logs this error. We just show localized message.
+                Console.WriteLine(LocalizationManager.GetString("DivisionByZeroError"));
+            }
+            catch (Exception ex)
+            {
+                logger?.Error(ex, "Error during calculation.");
+                Console.WriteLine(LocalizationManager.GetString("InvalidInputError")); // Generic error for other calculation issues
             }
         }
     }
