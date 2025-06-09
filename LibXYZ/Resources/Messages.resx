@@ -65,7 +65,14 @@
     <value>Select language: (1) English, (2) Spanish</value>
   </data>
   <data name="MenuPrompt" xml:space="preserve">
-    <value>Choose an option: (1) Perform Calculation, (2) Change Language, (3) Play Pac-Man, (4) Exit</value>
+    <value>MENU:
+1. Calculator
+2. Change Language
+3. Play Pac-Man
+4. [Placeholder Option]
+5. Database Operations
+6. Exit
+Choose an option (1-6):</value>
   </data>
   <data name="EnterFirstNumberPrompt" xml:space="preserve">
     <value>Enter the first number:</value>
