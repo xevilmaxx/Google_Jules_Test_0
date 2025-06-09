@@ -1,0 +1,52 @@
+# Prerequisites
+*.dll
+*.exe
+*.pdb
+*.nupkg
+*.snupkg
+*.prof
+*.zip
+*.tar
+*.tar.gz
+
+# Visual Studio code coverage results
+*.coverage
+*.coveragexml
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio temporary files
+.vs/
+*.user
+*.suo
+*.userprefs
+
+# Rider temporary files
+.idea/
+
+# Test results
+TestResults/
+*.trx
+*.html
+
+# Dotnet local tool manifest
+.config/dotnet-tools.json
+
+# NLog files (if configured to be in project directory, though typically they are in temp or logs)
+nlog-*.log
+internal-nlog.txt
+
+# User-specific files
+**/appsettings.Development.json
+**/secrets.json
+
+# Environment files
+.env
+
+# Rider
+*.sln.iml
+*.sln.DotSettings.user
