@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Resources;
 using System.Threading;
 
-namespace XYZConsole
+namespace LibXYZ
 {
     public static class LocalizationManager
     {
@@ -27,7 +27,7 @@ namespace XYZConsole
 
                 // The resource manager should be specific to the XYZConsole assembly
                 // and the base name of the resource files.
-                _resourceManager = new ResourceManager("XYZConsole.Resources.Messages", Assembly.GetExecutingAssembly());
+                _resourceManager = new ResourceManager("LibXYZ.Resources.Messages", typeof(LocalizationManager).Assembly);
 
                 Console.WriteLine($"DEBUG: Language set to: {cultureInfo.DisplayName}");
                 // Test string retrieval
@@ -63,7 +63,7 @@ namespace XYZConsole
                 Console.WriteLine("DEBUG: ResourceManager not initialized. Attempting to re-initialize with CurrentUICulture.");
                 // Attempt to initialize with current UI culture as a fallback.
                 // This is a defensive measure.
-                _resourceManager = new ResourceManager("XYZConsole.Resources.Messages", Assembly.GetExecutingAssembly());
+                _resourceManager = new ResourceManager("LibXYZ.Resources.Messages", typeof(LocalizationManager).Assembly);
             }
 
             string? value = _resourceManager.GetString(key, Thread.CurrentThread.CurrentUICulture);
