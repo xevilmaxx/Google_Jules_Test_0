@@ -65,7 +65,7 @@
     <value>Select language: (1) English, (2) Spanish</value>
   </data>
   <data name="MenuPrompt" xml:space="preserve">
-    <value>Choose an option: (1) Perform Calculation, (2) Change Language, (3) Exit</value>
+    <value>Choose an option: (1) Perform Calculation, (2) Change Language, (3) Play Pac-Man, (4) Exit</value>
   </data>
   <data name="EnterFirstNumberPrompt" xml:space="preserve">
     <value>Enter the first number:</value>
@@ -93,5 +93,8 @@
     <value>Critical Error: Logger could not be initialized. Calculation functionality disabled.</value>
   </data>
     <value>Goodbye!</value>
+  </data>
+  <data name="PacManMenuOption" xml:space="preserve">
+    <value>(4) Play Pac-Man</value>
   </data>
 </root>

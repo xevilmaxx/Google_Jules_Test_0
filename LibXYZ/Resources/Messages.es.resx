@@ -65,7 +65,7 @@
     <value>Seleccione el idioma: (1) Inglés, (2) Español</value>
   </data>
   <data name="MenuPrompt" xml:space="preserve">
-    <value>Elija una opción: (1) Realizar Cálculo, (2) Cambiar Idioma, (3) Salir</value>
+    <value>Elija una opción: (1) Realizar Cálculo, (2) Cambiar Idioma, (3) Jugar Pac-Man, (4) Salir</value>
   </data>
   <data name="EnterFirstNumberPrompt" xml:space="preserve">
     <value>Ingrese el primer número:</value>
@@ -93,5 +93,8 @@
     <value>Error Crítico: No se pudo inicializar el registrador. La funcionalidad de cálculo está deshabilitada.</value>
   </data>
     <value>¡Adiós!</value>
+  </data>
+  <data name="PacManMenuOption" xml:space="preserve">
+    <value>(4) Jugar Pac-Man</value>
   </data>
 </root>

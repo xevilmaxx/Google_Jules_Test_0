@@ -1,19 +1,19 @@
 using NLog;
 using System;
-using System.Globalization; // Required for CultureInfo
-using System.Threading;    // Required for Thread.CurrentThread
-using LibXYZ;
+using System.Globalization;
+using System.Threading;
+using LibXYZ; // For LocalizationManager and PacMan
+using LibXYZ.PacMan; // For Game specifically
 
 namespace XYZConsole
 {
     class Program
     {
-        private static ILogger? logger; // Nullable logger
+        private static ILogger? logger;
         private static AdvancedCalculator? calculator;
 
         static void Main(string[] args)
         {
-            // Initialize NLog first
             try
             {
                 LogManager.Setup().LoadConfigurationFromFile("nlog.config");
@@ -22,23 +22,17 @@ namespace XYZConsole
             catch (Exception ex)
             {
                 Console.WriteLine($"Critical NLog initialization error: {ex.Message}. Logging will be unavailable.");
-                // Optionally, exit if logging is absolutely critical
             }
 
             logger?.Info("XYZConsole application started.");
-
-            // Initialize LocalizationManager - default to English
             LocalizationManager.SetLanguage("en");
 
-            // Initialize Calculator
             if (logger != null)
             {
                 calculator = new AdvancedCalculator(logger);
             }
             else
             {
-                // If logger failed, we can't create calculator.
-                // Program will still run but calculations will be disabled in the menu.
                 Console.WriteLine(LocalizationManager.GetString("CriticalErrorLoggerNotInitialized"));
             }
 
@@ -47,6 +41,7 @@ namespace XYZConsole
             bool running = true;
             while (running)
             {
+                // MenuPrompt now includes all options up to Exit.
                 Console.WriteLine("\n" + LocalizationManager.GetString("MenuPrompt"));
                 string? choice = Console.ReadLine();
 
@@ -59,13 +54,28 @@ namespace XYZConsole
                         }
                         else
                         {
-                             Console.WriteLine(LocalizationManager.GetString("CriticalErrorCalculatorNotInitialized")); // Create this key
+                             Console.WriteLine(LocalizationManager.GetString("CriticalErrorCalculatorNotInitialized"));
                         }
                         break;
                     case "2": // Change Language
                         ChangeLanguage();
                         break;
-                    case "3": // Exit
+                    case "3": // Play Pac-Man (New)
+                        if (logger != null)
+                        {
+                            logger.Info("Starting Pac-Man game from console menu.");
+                            LibXYZ.PacMan.Game pacManGame = new LibXYZ.PacMan.Game(logger);
+                            pacManGame.Start();
+                            // After PacMan finishes, re-display main welcome/menu context
+                            Console.Clear(); // Clear PacMan screen
+                            Console.WriteLine(LocalizationManager.GetString("WelcomeMessage")); // Re-show welcome
+                        }
+                        else
+                        {
+                            Console.WriteLine(LocalizationManager.GetString("CriticalErrorLoggerNotInitialized"));
+                        }
+                        break;
+                    case "4": // Exit (was 3)
                         running = false;
                         break;
                     default:
@@ -76,7 +86,7 @@ namespace XYZConsole
 
             Console.WriteLine(LocalizationManager.GetString("GoodbyeMessage"));
             logger?.Info("XYZConsole application finished successfully.");
-            LogManager.Shutdown(); // Flush and shutdown NLog
+            LogManager.Shutdown();
         }
 
         static void ChangeLanguage()
@@ -97,15 +107,14 @@ namespace XYZConsole
                     Console.WriteLine(LocalizationManager.GetString("InvalidInputError"));
                     break;
             }
-            // Re-display welcome message in new language
             Console.WriteLine(LocalizationManager.GetString("WelcomeMessage"));
         }
 
         static void PerformCalculation()
         {
-            if (calculator == null) // Should be checked before calling
+            if (calculator == null)
             {
-                Console.WriteLine(LocalizationManager.GetString("CriticalErrorCalculatorNotInitialized")); // Create this key
+                Console.WriteLine(LocalizationManager.GetString("CriticalErrorCalculatorNotInitialized"));
                 return;
             }
 
@@ -146,7 +155,7 @@ namespace XYZConsole
                         result = calculator.Multiply(num1, num2);
                         break;
                     case "/":
-                        result = calculator.Divide(num1, num2); // Handles DivideByZeroException internally
+                        result = calculator.Divide(num1, num2);
                         break;
                     default:
                         Console.WriteLine(LocalizationManager.GetString("InvalidInputError"));
@@ -156,13 +165,12 @@ namespace XYZConsole
             }
             catch (DivideByZeroException)
             {
-                // AdvancedCalculator already logs this error. We just show localized message.
                 Console.WriteLine(LocalizationManager.GetString("DivisionByZeroError"));
             }
             catch (Exception ex)
             {
                 logger?.Error(ex, "Error during calculation.");
-                Console.WriteLine(LocalizationManager.GetString("InvalidInputError")); // Generic error for other calculation issues
+                Console.WriteLine(LocalizationManager.GetString("InvalidInputError"));
             }
         }
     }
