@@ -2,10 +2,10 @@ using NLog;
 using System;
 using System.Globalization;
 using System.Threading;
-using System.Collections.Generic; // For List<LogEntry>
+using System.Collections.Generic;
 using LibXYZ;
 using LibXYZ.PacMan;
-using LibXYZ.Database; // For LogService and LogEntry
+using LibXYZ.Database;
 
 namespace XYZConsole
 {
@@ -16,7 +16,6 @@ namespace XYZConsole
 
         static void Main(string[] args)
         {
-            // NLog and LocalizationManager setup (remains the same)
             try { LogManager.Setup().LoadConfigurationFromFile("nlog.config"); logger = LogManager.GetCurrentClassLogger(); }
             catch (Exception ex) { Console.WriteLine($"NLog init error: {ex.Message}"); }
             logger?.Info("XYZConsole application started.");
@@ -50,10 +49,15 @@ namespace XYZConsole
                         }
                         else Console.WriteLine(LocalizationManager.GetString("CriticalErrorLoggerNotInitialized"));
                         break;
-                    case "4": // Database Operations (New)
+                    case "4": // Placeholder / Not Implemented
+                        Console.WriteLine(LocalizationManager.GetString("OptionNotImplemented"));
+                        Console.WriteLine("(Press any key to continue)");
+                        Console.ReadLine(); // Changed for automated testing
+                        break;
+                    case "5": // Database Operations (New position)
                         HandleDatabaseOperations();
                         break;
-                    case "5": // Exit (was 4)
+                    case "6": // Exit (New position)
                         running = false;
                         break;
                     default:
@@ -66,7 +70,7 @@ namespace XYZConsole
             LogManager.Shutdown();
         }
 
-        static void ChangeLanguage() // Remains the same
+        static void ChangeLanguage()
         {
             Console.WriteLine(LocalizationManager.GetString("SelectLanguagePrompt"));
             string? langChoice = Console.ReadLine();
@@ -79,7 +83,7 @@ namespace XYZConsole
             Console.WriteLine(LocalizationManager.GetString("WelcomeMessage"));
         }
 
-        static void PerformCalculation() // Remains the same
+        static void PerformCalculation()
         {
             if (calculator == null) { Console.WriteLine(LocalizationManager.GetString("CriticalErrorCalculatorNotInitialized")); return; }
             double num1, num2; string? operation;
@@ -110,7 +114,6 @@ namespace XYZConsole
         {
             logger?.Info("Handling Database Operations.");
             LogService logService = new LogService();
-            // logService.EnsureDatabaseReady(); // Optional: AppDbContext constructor calls EnsureCreated
 
             Console.WriteLine($"--- {LocalizationManager.GetString("ViewLogEntriesPrompt")} ---");
             List<LogEntry> entries = logService.GetAllLogEntries();
@@ -122,22 +125,23 @@ namespace XYZConsole
             {
                 foreach (var entry in entries)
                 {
-                    // Ensure messages with spaces are quoted if necessary, or just print as is.
-                    Console.WriteLine($"ID: {entry.Id}, Time: {entry.Timestamp:yyyy-MM-dd HH:mm:ss}, Msg: \"{entry.Message}\", Val: {entry.RandomValue}");
+                    // Formatting DateTime for consistent output
+                    Console.WriteLine($"ID: {entry.Id}, Time: {entry.Timestamp:yyyy-MM-dd HH:mm:ss UTC}, Msg: \"{entry.Message}\", Val: {entry.RandomValue}");
                 }
             }
             Console.WriteLine("--------------------");
 
             Console.Write(LocalizationManager.GetString("AddRandomEntryPrompt"));
             string? addChoice = Console.ReadLine()?.ToLower();
+            // Use GetString("YesChar").ToLower() for robust comparison with localized 'y' or 's'
             if (addChoice == LocalizationManager.GetString("YesChar").ToLower())
             {
                 logService.AddRandomLogEntry();
                 Console.WriteLine(LocalizationManager.GetString("EntryAddedMessage"));
 
                 Console.WriteLine($"--- {LocalizationManager.GetString("ViewLogEntriesPrompt")} (Updated) ---");
-                entries = logService.GetAllLogEntries(); // Refresh
-                if (entries.Count == 0) // Should not happen if one was just added
+                entries = logService.GetAllLogEntries();
+                if (entries.Count == 0)
                 {
                      Console.WriteLine(LocalizationManager.GetString("NoEntriesFoundMessage"));
                 }
@@ -145,13 +149,13 @@ namespace XYZConsole
                 {
                     foreach (var entry in entries)
                     {
-                        Console.WriteLine($"ID: {entry.Id}, Time: {entry.Timestamp:yyyy-MM-dd HH:mm:ss}, Msg: \"{entry.Message}\", Val: {entry.RandomValue}");
+                        Console.WriteLine($"ID: {entry.Id}, Time: {entry.Timestamp:yyyy-MM-dd HH:mm:ss UTC}, Msg: \"{entry.Message}\", Val: {entry.RandomValue}");
                     }
                 }
                 Console.WriteLine("--------------------");
             }
             Console.WriteLine("(Press any key to return to main menu)");
-            Console.ReadKey(true);
+            Console.ReadLine(); // Changed for automated testing
         }
     }
 }

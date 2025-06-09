@@ -115,4 +115,7 @@
   <data name="YesChar" xml:space="preserve">
     <value>y</value>
   </data>
+  <data name="OptionNotImplemented" xml:space="preserve">
+    <value>Option not implemented yet.</value>
+  </data>
 </root>
